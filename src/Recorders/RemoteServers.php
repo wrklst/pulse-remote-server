@@ -35,9 +35,10 @@ class RemoteServers
      */
     public function record(SharedBeat $event): void
     {
-        // run every 30 seconds, comapared to every 15 seconds (what is the default for the local Pulse Servers recorder)
-        // this is to reduce the amount of ssh commands (4 per run)
-        if ($event->time->second % 30 !== 0) {
+        $query_interval = intval($this->config->get('pulse.recorders.' . self::class . '.query_interval'));
+        $query_interval = $query_interval?$query_interval:15;
+
+        if ($event->time->second % $query_interval !== 0) {
             return;
         }
 
