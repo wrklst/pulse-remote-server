@@ -10,6 +10,11 @@ Install the package using Composer:
 composer require wrklst/pulse-remote-server
 ```
 
+## Authentication
+
+Requires SSH key authentication in place for authentication to remote server.
+Remote Server is assumed to be running Linux. Local server supports Mac and Linux servers.
+
 ## Register the recorder
 
 In your `pulse.php` configuration file, register the RemoteServerRecorder with the desired settings:
