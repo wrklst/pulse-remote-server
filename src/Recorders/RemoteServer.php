@@ -17,7 +17,7 @@ use RuntimeException;
 /**
  * @internal
  */
-class RemoteServers
+class RemoteServer
 {
     /**
      * The events to listen for.
