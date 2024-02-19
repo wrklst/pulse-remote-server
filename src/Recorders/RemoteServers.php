@@ -1,11 +1,4 @@
 <?php
-/*
-Requires SSH key authentication in place for authentication to remote server.
-Remote Server is assumed to be running Ubuntu Linux.
-This is usefull to record server performance for database/cache/queue etc only servers, that do not have pulse installed, which would also require nginx and php etc.
-Instead the performance measurement is taken from the app server via ssh remote commands.
-*/
-
 namespace WrkLst\Pulse\RemoteServer\Recorders;
 
 use Illuminate\Config\Repository;
@@ -41,7 +34,7 @@ class RemoteServers
      */
     public function record(SharedBeat $event): void
     {
-        // run every 30 seconds, comapared to than every 15 seconds (what is the default for the Pulse Servers recorder)
+        // run every 30 seconds, comapared to every 15 seconds (what is the default for the local Pulse Servers recorder)
         // this is to reduce the amount of ssh commands (4 per run)
         if ($event->time->second % 30 !== 0) {
             return;
@@ -52,6 +45,7 @@ class RemoteServers
         $slug = Str::slug($server);
         
         /*
+        TODO
         This needs to be optomized to reduce the amount of ssh commands fired.
         E.g. running all commands with one ssh call with piping a shell script into ssh.
         ´cat server-stats.sh | ssh 1.2.3.4´
@@ -91,6 +85,7 @@ class RemoteServers
                     };
 
                     /*
+                    // Example output
                     Filesystem     1K-blocks     Used Available Use% Mounted on
                     /dev/root      507930276 31400452 476513440   7% /
                     */

@@ -1,6 +1,6 @@
 # Remote Server for Laravel Pulse
 
-Add remote linux server to your server stats. This is meant for servers that do not run PHP, e.g. database or cache servers. Servers that run PHP should install their own instance of Laravel Pulse instead.
+Add remote linux server to your server stats. This is meant for servers that do not run PHP, e.g. database or cache servers. Servers that run PHP should install their own instance of [Laravel Pulse](https://pulse.laravel.com) instead.
 
 ## Installation
 
@@ -17,7 +17,7 @@ Remote Server is assumed to be running Linux. Local server supports Mac and Linu
 
 ## Register the recorder
 
-In your `pulse.php` configuration file, register the RemoteServerRecorder with the desired settings:
+In your `pulse.php` configuration file, register the \WrkLst\Pulse\RemoteServer\Recorders\RemoteServers with the desired settings:
 
 ```php
 return [
