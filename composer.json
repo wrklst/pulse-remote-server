@@ -1,0 +1,23 @@
+{
+    "name": "wrklst/pulse-remote-server",
+    "description": "A Laravel Pulse Recorder for Remote Servers",
+    "keywords": ["laravel", "remote", "server"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tobias Vielmetter-Diekmann",
+            "email": "tobias@wrklst.art"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "illuminate/support": "*",
+        "laravel/pulse": "^1.0.0@beta"
+    },
+    "autoload": {
+        "psr-4": {
+            "WrkLst\\Pulse\\RemoteServer\\": "src/"
+        }
+    }
+}
