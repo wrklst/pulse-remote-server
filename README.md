@@ -19,7 +19,7 @@ return [
     // ...
     
     'recorders' => [
-        \WrkLst\Pulse\RemoteServer\RemoteServerRecorder::class => [
+        \WrkLst\Pulse\RemoteServer\Recorders\RemoteServers::class => [
             'server_name' => "database-server-1",
             'server_ssh' => "ssh forge@1.2.3.4",
             'directories' => explode(':', env('PULSE_SERVER_DIRECTORIES', '/')),
