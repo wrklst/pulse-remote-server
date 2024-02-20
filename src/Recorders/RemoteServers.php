@@ -63,9 +63,9 @@ class RemoteServers
         [1] 5534304
          top -bn1 | grep -E '^(%Cpu|CPU)' | awk '{ print $2 + $4 }'
         [2] 18
-        df --output=used,avail /
-        [3]     Used     Avail
-        [4] 34218600 473695292
+        df / | awk 'NR==2 {print $3 "\n" $4 }'
+        [3] 34218600
+        [4] 473695292
         */
 
         $memoryTotal = intval($remoteServerStats[0] / 1024);
@@ -75,37 +75,32 @@ class RemoteServers
         $storageDirectories = $this->config->get('pulse.recorders.' . self::class . '.directories');
 
         if (count($storageDirectories) == 1 && $storageDirectories[0] == "/") {
-            $storage = preg_replace('/\s+/', ' ', $remoteServerStats[4]); // replace multi space with single space
-            $storage = explode(" ", $storage); // break into segments based on sigle space
-
-            $storageTotal = $storage[0] + $storage[1]; // used and availble
-            $storageUsed = $storage[0]; // used
-
             $storage = [collect([
                 'directory' => "/",
-                'total' => intval(round($storageTotal / 1024)), // MB
-                'used' => intval(round($storageUsed / 1024)), // MB
+                'total' => (round((intval($remoteServerStats[3]) +  intval($remoteServerStats[4])) / 1024)), // MB
+                'used' => (round(intval($remoteServerStats[3]) / 1024)), // MB
             ])];
         } else {
             $storage = collect($storageDirectories)
-                ->map(function (string $directory) use ($remote_ssh) {
-                    $storage = match (PHP_OS_FAMILY) {
-                        'Darwin' => (`$remote_ssh 'df $directory'`),
-                        'Linux' => (`$remote_ssh 'df $directory'`),
-                        default => throw new RuntimeException('The pulse:check command does not currently support ' . PHP_OS_FAMILY),
-                    };
-
-                    $storage = explode("\n", $storage); // break in lines
-                    $storage = preg_replace('/\s+/', ' ', $storage[1]); // replace multi space with single space
-                    $storage = explode(" ", $storage); // break into segments based on sigle space
-
-                    $storageTotal = $storage[2] + $storage[3]; // used and availble
-                    $storageUsed = $storage[2]; // used
-
+                ->map(function (string $directory) use ($remote_ssh, $remoteServerStats) {
+                    if($directory=="/") {
+                        $storageTotal = intval($remoteServerStats[3]) +  intval($remoteServerStats[4]); // used and availble
+                        $storageUsed = intval($remoteServerStats[3]); // used
+                    } else {
+                        $storage = match (PHP_OS_FAMILY) {
+                            'Darwin' => (`$remote_ssh 'df $directory' | awk 'NR==2 {print $3 "\n" $4 }'`),
+                            'Linux' => (`$remote_ssh 'df $directory' | awk 'NR==2 {print $3 "\n" $4 }'`),
+                            default => throw new RuntimeException('The pulse:check command does not currently support ' . PHP_OS_FAMILY),
+                        };
+                        $storage = explode("\n", $storage); // break in lines                    
+                        $storageTotal = intval($storage[0]) + intval($storage[1]); // used and availble
+                        $storageUsed = intval($storage[0]); // used
+                    }
+                    
                     return [
                         'directory' => $directory,
-                        'total' => intval(round($storageTotal / 1024)), // MB
-                        'used' => intval(round($storageUsed / 1024)), // MB
+                        'total' => (round($storageTotal / 1024)), // MB
+                        'used' => (round($storageUsed / 1024)), // MB
                     ];
                 })
                 ->all();
