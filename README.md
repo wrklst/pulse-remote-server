@@ -1,10 +1,10 @@
 # Remote Server for Laravel Pulse
 
-Add remote linux server to your server stats. This is meant for servers that do not run PHP, e.g. database or cache servers. Servers that run PHP should install their own instance of [Laravel Pulse](https://pulse.laravel.com) instead.
+Enhance your server stats by adding a remote Linux server to the mix. This feature is designed to incorporate remote servers to Laravel Pulse that do not execute PHP, such as database or cache servers. Servers running PHP are recommended to install their own instance of [Laravel Pulse](https://pulse.laravel.com) instead.
 
 ## Installation
 
-Install the package using Composer:
+Begin by installing the package via Composer:
 
 ```shell
 composer require wrklst/pulse-remote-server
@@ -12,17 +12,16 @@ composer require wrklst/pulse-remote-server
 
 ## Authentication
 
-Requires SSH key authentication in place for authentication to remote server.
-Remote Server is assumed to be running Linux. Local server supports Mac and Linux servers.
+Ensure SSH key authentication is set up for accessing the remote server. The Remote Server package assumes the remote server is running Linux. It is compatible with both Mac and Linux servers for in your Larvel Pulse installation.
 
-## Register the recorder
+## Register the Recorder
 
-In your `pulse.php` configuration file, register the \WrkLst\Pulse\RemoteServer\Recorders\RemoteServers with the desired settings:
+In your `pulse.php` configuration file, incorporate the `\WrkLst\Pulse\RemoteServer\Recorders\RemoteServers` class with the desired settings:
 
 ```php
 return [
-    // ...
-    
+    // Other configurations...
+
     'recorders' => [
         \WrkLst\Pulse\RemoteServer\Recorders\RemoteServers::class => [
             'server_name' => "database-server-1",
@@ -34,17 +33,13 @@ return [
 ]
 ```
 
-Ensure you're running [the `pulse:check` command](https://laravel.com/docs/10.x/pulse#capturing-entries).
+Don't forget to run [the `pulse:check` command](https://laravel.com/docs/10.x/pulse#capturing-entries) to start recording.
 
+## Configuration Notes
 
-And that's it! 
+- `server_name`: Specify the name of the server as it should appear in the server stats.
+- `server_ssh`: Enter the SSH command to connect to the server (`ssh user@ipaddress`). You can also include options like `-p 2222` for non-standard ports.
+- `query_interval`: Define the interval for querying the remote server's stats, in seconds.
+- `directories`: Specify the directories to check for used and available disk capacity. By default, this is set to "/", but you can add multiple directories or change the directory. Note that altering this configuration might impact query performance. For specialized setups, consider forking the repository and adjusting the shell script accordingly.
 
-## Config Notes
-
-`server_name`: name of server how it should be shown in the server stats
-
-`server_ssh`: ssh command to connect to server (ssh user@ipaddress, can also inlcude option -p 2222 for the port if you are not using standard ports etc).
-
-`query_interval`: define the interval of how often the stats should be queries in seconds
-
-`directories`: define the directories checked for disk capacity used and available. We recommend keeping this at "/". adding multiple directories or changing the directory will slow down the query. If you have a special setup, considder forking the repository and adjusting the shell script accordginly.
+And that's all there is to it!
