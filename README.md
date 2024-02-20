@@ -12,7 +12,7 @@ composer require wrklst/pulse-remote-server
 
 ## Authentication
 
-Ensure SSH key authentication is set up for accessing the remote server. The Remote Server package assumes the remote server is running Linux. It is compatible with both Mac and Linux servers for in your Larvel Pulse installation.
+Ensure SSH key authentication is set up for accessing the remote server. The Remote Server package assumes the remote server is running Linux. It is compatible with both Mac and Linux servers for your local Larvel Pulse installation.
 
 ## Register the Recorder
 
