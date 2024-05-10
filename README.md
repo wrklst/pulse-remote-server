@@ -1,6 +1,6 @@
 # Remote Server for Laravel Pulse
 
-Enhance your server stats by adding a remote Linux server to the mix. This feature is designed to incorporate remote servers to Laravel Pulse that do not execute PHP, such as database or cache servers. Servers running PHP are recommended to install their own instance of [Laravel Pulse](https://pulse.laravel.com) instead.
+Enhance your server stats by adding remote Linux servers to the mix. This feature is designed to incorporate remote servers to Laravel Pulse that do not execute PHP, such as database or cache servers. Servers running PHP are recommended to install their own instance of [Laravel Pulse](https://pulse.laravel.com) instead.
 
 ## Installation
 
@@ -24,10 +24,18 @@ return [
 
     'recorders' => [
         \WrkLst\Pulse\RemoteServer\Recorders\RemoteServers::class => [
-            'server_name' => "database-server-1",
-            'server_ssh' => "ssh forge@1.2.3.4",
-            'query_interval' => 15,
-            'directories' => explode(':', env('PULSE_SERVER_DIRECTORIES', '/')),
+            [
+                'server_name' => "database-server-1",
+                'server_ssh' => "ssh forge@1.2.3.4",
+                'query_interval' => 15,
+                'directories' => explode(':', env('PULSE_SERVER_DIRECTORIES', '/')),
+            ],
+            [
+                'server_name' => "cache-server-1",
+                'server_ssh' => "ssh forge@1.2.3.5",
+                'query_interval' => 15,
+                'directories' => explode(':', env('PULSE_SERVER_DIRECTORIES', '/')),
+            ]
         ],
     ]
 ]
